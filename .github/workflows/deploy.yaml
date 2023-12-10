@@ -1,0 +1,21 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: GCP auth
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: '${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}'
+      - name: setup Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          version: '430.0.0'
+      - name: deploy
+        run: |
+          gcloud run deploy nextjs-bt5b0n --project rana8-poc --region asia-northeast1 --platform managed --source .
